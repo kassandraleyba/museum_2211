@@ -21,7 +21,7 @@ RSpec.describe Museum do
     end
 
     describe "#exhibits" do
-        it "has no exhibits by default" do
+        it "starts with no exhibits" do
             expect(dmns.exhibits).to eq([])
         end
 
@@ -31,6 +31,21 @@ RSpec.describe Museum do
             dmns.add_exhibit(imax)
 
             expect(dmns.exhibits).to eq([gems_and_minerals, dead_sea_scrolls, imax])
+        end
+    end
+
+    describe "#recommends" do
+        it "can recommend exhibits" do 
+            dmns.add_exhibit(gems_and_minerals)
+            dmns.add_exhibit(dead_sea_scrolls)
+            dmns.add_exhibit(imax)
+
+            patron_1.add_interest("Dead Sea Scrolls")
+            patron_1.add_interest("Gems and Minerals")
+            patron_2.add_interest("IMAX")
+
+            expect(dmns.recommend_exhibits(patron_1)).to eq([dead_sea_scrolls, gems_and_minerals])
+            expect(dmns.recommend_exhibits(patron_2)).to eq([imax])
         end
     end
 end
